@@ -2,7 +2,7 @@ import 'package:app/src/models/product.dart';
 import 'package:app/src/services/product_service.dart';
 import 'package:flutter/material.dart';
 
-class ProdutctViewModel extends ChangeNotifier{
+class ProductsViewModel extends ChangeNotifier{
   final ProductService _service = ProductService();
 
   List<Product> products = [];
