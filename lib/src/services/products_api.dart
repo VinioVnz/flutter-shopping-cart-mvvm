@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:app/src/models/product.dart';
 import 'package:http/http.dart' as http;
-class ProductService {
+class ProductsApi {
   final String _baseUrl = 'https://fakestoreapi.com/products';
 
   Future<List<Product>> getAll() async{

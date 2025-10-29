@@ -1,16 +1,21 @@
 import 'package:app/src/models/cart.dart';
 import 'package:app/src/models/cart_item.dart';
 import 'package:app/src/models/product.dart';
+import 'package:app/src/services/cart_api.dart';
+import 'package:app/src/services/checkout_api.dart';
 import 'package:flutter/material.dart';
 
 class CartViewModel extends ChangeNotifier {
   final Cart _cart = Cart();
+  final CheckoutApi _checkoutApi = CheckoutApi();
+  final CartApi _cartApi = CartApi();
 
   List<CartItem> get items => _cart.items;
   double get total => _cart.total;
   int get totalItems => _cart.totalItems;
-
-  void addToCart(Product product) {
+  bool loading = false;
+  String error = '';
+  void addToCart(Product product, BuildContext context) {
     final index = _cart.items.indexWhere(
       (item) => item.product.id == product.id,
     );
@@ -20,7 +25,17 @@ class CartViewModel extends ChangeNotifier {
       _cart.items.add(CartItem(product: product, quantity: 1));
     } else {
       //produto esta no carrinho
-      _cart.items[index].quantity++;
+      if (_cart.items[index].quantity < 10) {
+        //logica da regra de negocio
+        _cart.items[index].quantity++;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Quantidade máxima de 10 itens por produto!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
     /*   print('Items do cart:');
     for(var item in items){
@@ -30,20 +45,26 @@ class CartViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromCart(Product product) {
-    final index = _cart.items.indexWhere(
-      (item) => item.product.id == product.id,
-    );
+  Future<void> removeFromCart(Product product) async {
+    try {
+      await _cartApi.removeItem(product.id);
 
-    if (index != -1) {
-      final item = _cart.items[index];
+      final index = _cart.items.indexWhere(
+        (item) => item.product.id == product.id,
+      );
 
-      if (item.quantity > 1) {
-        item.quantity--;
-      } else {
-        _cart.items.removeAt(index);
+      if (index != -1) {
+        final item = _cart.items[index];
+
+        if (item.quantity > 1) {
+          item.quantity--;
+        } else {
+          _cart.items.removeAt(index);
+        }
+        notifyListeners();
       }
-      notifyListeners();
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -59,5 +80,19 @@ class CartViewModel extends ChangeNotifier {
     );
 
     return item.quantity;
+  }
+
+  Future<void> checkout() async {
+    try {
+      loading = true;
+      notifyListeners();
+
+      await _checkoutApi.checkout();
+    } catch (e) {
+      rethrow;
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 }

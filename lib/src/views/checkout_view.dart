@@ -1,3 +1,4 @@
+import 'package:app/src/colors/cores.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutView extends StatelessWidget {
@@ -5,6 +6,8 @@ class CheckoutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: Text('Checkout'),backgroundColor: Cores().mainColor,),
+    );
   }
 }

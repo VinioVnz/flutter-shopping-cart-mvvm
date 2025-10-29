@@ -37,21 +37,21 @@ class ProductCard extends StatelessWidget {
               style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 4),
-            _button(cart)
+            _button(cart, context),
           ],
         ),
       ),
     );
   }
 
-  Widget _button(CartViewModel cart) {
+  Widget _button(CartViewModel cart, BuildContext context) {
     final quant = cart.checkQuantity(product);
 
     if (quant == 0) {
       //botao de add
       return ElevatedButton(
         onPressed: () {
-          cart.addToCart(product);
+          cart.addToCart(product, context);
         },
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
@@ -65,14 +65,25 @@ class ProductCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () => cart.removeFromCart(product),
+            onPressed: () async {
+              try {
+                await cart.removeFromCart(product);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('$e'), duration: Duration(seconds: 2)),
+                );
+              }
+            },
             icon: Icon(Icons.remove),
           ),
           Text(
             '$quant',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          IconButton(onPressed: () => cart.addToCart(product), icon: Icon(Icons.add))
+          IconButton(
+            onPressed: () => cart.addToCart(product, context),
+            icon: Icon(Icons.add),
+          ),
         ],
       );
     }

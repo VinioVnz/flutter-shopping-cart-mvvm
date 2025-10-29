@@ -9,7 +9,7 @@ class CatalogView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartViewModel>(context);
+    final cart = context.watch<CartViewModel>();
     return ChangeNotifierProvider(
       create: (_) => ProductsViewModel()..loadProducts(),
       child: Consumer<ProductsViewModel>(

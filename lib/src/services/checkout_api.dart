@@ -1,0 +1,8 @@
+class CheckoutApi {
+  Future<void> checkout() async {
+    await Future.delayed(Duration(seconds: 1));
+    final random = DateTime.now().millisecondsSinceEpoch % 2;
+    if(random ==0) throw ('Erro no checkout'); 
+
+  }
+}

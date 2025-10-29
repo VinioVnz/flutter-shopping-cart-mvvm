@@ -1,9 +1,9 @@
 import 'package:app/src/models/product.dart';
-import 'package:app/src/services/product_service.dart';
+import 'package:app/src/services/products_api.dart';
 import 'package:flutter/material.dart';
 
 class ProductsViewModel extends ChangeNotifier{
-  final ProductService _service = ProductService();
+  final ProductsApi _service = ProductsApi();
 
   List<Product> products = [];
   bool loading = false;
