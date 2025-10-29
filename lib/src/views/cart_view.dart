@@ -9,7 +9,7 @@ class CartView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cart = context.watch<CartViewModel>();
     return Scaffold(
-      appBar: AppBar(title: Text('Tela carrinho'), centerTitle: true),
+      appBar: AppBar(title: Text('Carrinho'), centerTitle: true),
       body: _buildBody(cart, context),
     );
   }
