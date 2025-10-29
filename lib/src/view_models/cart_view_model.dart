@@ -21,12 +21,9 @@ class CartViewModel extends ChangeNotifier {
     );
 
     if (index == -1) {
-      //produto n esta no carrinho
       _cart.items.add(CartItem(product: product, quantity: 1));
     } else {
-      //produto esta no carrinho
       if (_cart.items[index].quantity < 10) {
-        //logica da regra de negocio
         _cart.items[index].quantity++;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -37,11 +34,6 @@ class CartViewModel extends ChangeNotifier {
         );
       }
     }
-    /*   print('Items do cart:');
-    for(var item in items){
-      print(item.product.name);
-      print(item.quantity);
-    } */
     notifyListeners();
   }
 

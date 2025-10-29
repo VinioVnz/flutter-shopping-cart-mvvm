@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => CartViewModel())],
+    ChangeNotifierProvider(
+      create: (_) => CartViewModel(),
       child: const App(),
     ),
   );

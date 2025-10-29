@@ -1,4 +1,3 @@
-import 'package:app/src/colors/cores.dart';
 import 'package:app/src/models/product.dart';
 import 'package:app/src/view_models/cart_view_model.dart';
 import 'package:flutter/material.dart';

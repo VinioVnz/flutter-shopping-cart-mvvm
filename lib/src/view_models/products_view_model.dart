@@ -15,8 +15,7 @@ class ProductsViewModel extends ChangeNotifier{
     try {
       products = await _service.getAll();
     } catch (e) {
-      products = []; //em caso de erro, retornara apenas uma lista vazia
-      print('Erro: $e');
+      products = [];
     }
 
     loading = false;

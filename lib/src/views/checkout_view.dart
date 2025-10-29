@@ -79,7 +79,7 @@ class CheckoutView extends StatelessWidget {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/catalog',
-                    (route) => false, // remove todas as telas anteriores
+                    (route) => false, 
                   );
                 },
                 child: Text('Novo pedido'),
