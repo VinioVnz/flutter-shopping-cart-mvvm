@@ -32,7 +32,7 @@ class CartViewModel extends ChangeNotifier {
         }
       }
       notifyListeners();
-      return Result.success(null);
+      return Result.success("Sucesso");
     } catch (e) {
       return Result.failure('$e');
     }
@@ -56,7 +56,7 @@ class CartViewModel extends ChangeNotifier {
         }
         notifyListeners();
       }
-      return Result.success(null);
+      return Result.success("Sucesso");
     } catch (e) {
       return Result.failure('$e');
     }
@@ -82,7 +82,7 @@ class CartViewModel extends ChangeNotifier {
       notifyListeners();
 
       await _checkoutApi.checkout();
-      return Result.success(null);
+      return Result.success("Sucesso");
     } catch (e) {
       return Result.failure('$e');
     } finally {
