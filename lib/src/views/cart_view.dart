@@ -57,12 +57,12 @@ class CartView extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.remove),
                       onPressed: () async {
-                        try {
-                          await cart.removeFromCart(item.product);
-                        } catch (e) {
+                        final result = await cart.removeFromCart(item.product);
+
+                        if (result.isFailure) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('$e'),
+                              content: Text(result.error!),
                               duration: Duration(seconds: 2),
                             ),
                           );
@@ -72,7 +72,15 @@ class CartView extends StatelessWidget {
                     IconButton(
                       icon: Icon(Icons.add),
                       onPressed: () {
-                        cart.addToCart(item.product, context);
+                        final result = cart.addToCart(item.product);
+                        if (result.isFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(result.error!),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],

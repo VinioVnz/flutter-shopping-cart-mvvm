@@ -50,7 +50,15 @@ class ProductCard extends StatelessWidget {
       //botao de add
       return ElevatedButton(
         onPressed: () {
-          cart.addToCart(product, context);
+          final result = cart.addToCart(product);
+          if (result.isFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(result.error!),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
         },
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
@@ -65,11 +73,13 @@ class ProductCard extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () async {
-              try {
-                await cart.removeFromCart(product);
-              } catch (e) {
+              final result = await cart.removeFromCart(product);
+              if (result.isFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('$e'), duration: Duration(seconds: 2)),
+                  SnackBar(
+                    content: Text(result.error!),
+                    duration: Duration(seconds: 2),
+                  ),
                 );
               }
             },
@@ -80,7 +90,17 @@ class ProductCard extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           IconButton(
-            onPressed: () => cart.addToCart(product, context),
+            onPressed: () {
+              final result = cart.addToCart(product);
+              if (result.isFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(result.error!),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
             icon: Icon(Icons.add),
           ),
         ],

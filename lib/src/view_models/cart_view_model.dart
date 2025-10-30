@@ -3,6 +3,7 @@ import 'package:app/src/models/cart_item.dart';
 import 'package:app/src/models/product.dart';
 import 'package:app/src/services/cart_api.dart';
 import 'package:app/src/services/checkout_api.dart';
+import 'package:app/src/utils/result.dart';
 import 'package:flutter/material.dart';
 
 class CartViewModel extends ChangeNotifier {
@@ -15,29 +16,29 @@ class CartViewModel extends ChangeNotifier {
   int get totalItems => _cart.totalItems;
   bool loading = false;
   String error = '';
-  void addToCart(Product product, BuildContext context) {
-    final index = _cart.items.indexWhere(
-      (item) => item.product.id == product.id,
-    );
+  Result<void> addToCart(Product product) {
+    try {
+      final index = _cart.items.indexWhere(
+        (item) => item.product.id == product.id,
+      );
 
-    if (index == -1) {
-      _cart.items.add(CartItem(product: product, quantity: 1));
-    } else {
-      if (_cart.items[index].quantity < 10) {
-        _cart.items[index].quantity++;
+      if (index == -1) {
+        _cart.items.add(CartItem(product: product, quantity: 1));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Quantidade máxima de 10 itens por produto!'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        if (_cart.items[index].quantity < 10) {
+          _cart.items[index].quantity++;
+        } else {
+          return Result.failure('Quantidade máxima de 10 itens por produto!');
+        }
       }
+      notifyListeners();
+      return Result.success(null);
+    } catch (e) {
+      return Result.failure('$e');
     }
-    notifyListeners();
   }
 
-  Future<void> removeFromCart(Product product) async {
+  Future<Result<void>> removeFromCart(Product product) async {
     try {
       await _cartApi.removeItem(product.id);
 
@@ -55,8 +56,9 @@ class CartViewModel extends ChangeNotifier {
         }
         notifyListeners();
       }
+      return Result.success(null);
     } catch (e) {
-      rethrow;
+      return Result.failure('$e');
     }
   }
 
@@ -74,14 +76,15 @@ class CartViewModel extends ChangeNotifier {
     return item.quantity;
   }
 
-  Future<void> checkout() async {
+  Future<Result<void>> checkout() async {
     try {
       loading = true;
       notifyListeners();
 
       await _checkoutApi.checkout();
+      return Result.success(null);
     } catch (e) {
-      rethrow;
+      return Result.failure('$e');
     } finally {
       loading = false;
       notifyListeners();
