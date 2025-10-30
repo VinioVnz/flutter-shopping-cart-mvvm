@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Cores {
-  Color mainColor = Colors.blueAccent;
+  Color mainColor = Colors.black;
   Color foregroundColor = Colors.white;
 }

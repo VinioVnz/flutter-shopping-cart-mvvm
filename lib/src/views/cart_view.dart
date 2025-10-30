@@ -1,3 +1,4 @@
+import 'package:app/src/colors/cores.dart';
 import 'package:app/src/view_models/cart_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -102,22 +103,28 @@ class CartView extends StatelessWidget {
               Text('Total de itens: ${cart.totalItems}'),
               Text('Total: R\$ ${cart.total.toStringAsFixed(2)}'),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  final result = await cart.checkout();
-                  if (result.isSuccess) {
-                    Navigator.pushNamed(context, '/checkout');
-                  } else if (result.isFailure) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('${result.error}'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
-                },
-                child: Text('Finalizar pedido'),
-              ),
+              cart.loading
+                  ? Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Cores().mainColor,
+                      foregroundColor: Cores().foregroundColor
+                    ),
+                      onPressed: () async {
+                        final result = await cart.checkout();
+                        if (result.isSuccess) {
+                          Navigator.pushNamed(context, '/checkout');
+                        } else if (result.isFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${result.error}'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text('Finalizar pedido'),
+                    ),
             ],
           ),
         ),

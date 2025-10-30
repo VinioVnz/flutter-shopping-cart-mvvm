@@ -74,12 +74,16 @@ class CheckoutView extends StatelessWidget {
               SizedBox(height: 16),
 
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Cores().mainColor,
+                  foregroundColor: Cores().foregroundColor,
+                ),
                 onPressed: () {
                   cart.clearCart();
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/catalog',
-                    (route) => false, 
+                    (route) => false,
                   );
                 },
                 child: Text('Novo pedido'),
