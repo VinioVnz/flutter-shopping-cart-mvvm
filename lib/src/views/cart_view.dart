@@ -104,13 +104,13 @@ class CartView extends StatelessWidget {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  try {
-                    await cart.checkout();
+                  final result = await cart.checkout();
+                  if (result.isSuccess) {
                     Navigator.pushNamed(context, '/checkout');
-                  } catch (e) {
+                  } else if (result.isFailure) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('$e'),
+                        content: Text('${result.error}'),
                         duration: Duration(seconds: 2),
                       ),
                     );
